@@ -1,21 +1,13 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Menu } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import { DataTable } from "@/components/ui/data-table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import useGetUsersQuery from "@/hooks/queries/use-get-users-query"
-import { formatDate } from "@/lib/format"
 import { User } from "@/types/user"
+import { formatDate } from "@/lib/format"
+import useGetUsersQuery from "@/hooks/queries/use-get-users-query"
+import { DataTable } from "@/components/ui/data-table"
+
+import { UsersTableMenu } from "./users-table-menu"
 
 const columns: ColumnDef<User>[] = [
   {
@@ -38,29 +30,7 @@ const columns: ColumnDef<User>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const user = row.original
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Abrir menu</span>
-              <Menu className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(user._id)}
-            >
-              Copiar ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
-            <DropdownMenuItem>Editar</DropdownMenuItem>
-            <DropdownMenuItem>Excluir</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+      return <UsersTableMenu user={user} />
     },
   },
 ]

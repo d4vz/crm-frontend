@@ -4,4 +4,6 @@ export interface CreateUserPayload {
   password: string
 }
 
-export interface UpdateUserPayload extends Partial<CreateUserPayload> {}
+export interface UpdateUserPayload extends Partial<CreateUserPayload> {
+  _id: string
+}

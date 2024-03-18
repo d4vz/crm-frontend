@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { deleteCookie, getCookie, setCookie } from "cookies-next"
 import { jwtDecode } from "jwt-decode"
 
@@ -10,6 +10,7 @@ const getAuth = async (request?: NextRequest) => {
     return getCookie("auth", {
       req: request,
       cookies,
+      path: "/",
     })
   }
 
@@ -18,9 +19,11 @@ const getAuth = async (request?: NextRequest) => {
 
 const setAuth = async (token: string) => {
   if (isServer()) {
+    ;("use server")
     const { cookies } = await import("next/headers")
     return setCookie("auth", token, {
       cookies,
+      path: "/",
     })
   }
 
@@ -36,22 +39,18 @@ const isValidToken = (token: string) => {
   return now < exp
 }
 
-const clearAuth = async () => {
+const clearAuth = async (req?: NextRequest, res?: NextResponse) => {
   if (isServer()) {
     const { cookies } = await import("next/headers")
     return deleteCookie("auth", {
       cookies,
+      req,
+      res,
+      path: "/",
     })
   }
 
   return deleteCookie("auth")
 }
 
-const getCurrentUser = async () => {
-  const token = await getAuth()
-  if (!token) return null
-  const decoded = jwtDecode(token)
-  return decoded
-}
-
-export { clearAuth, getAuth, getCurrentUser, isValidToken, setAuth }
+export { clearAuth, getAuth, isValidToken, setAuth }

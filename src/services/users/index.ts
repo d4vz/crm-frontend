@@ -10,7 +10,7 @@ class UsersService {
   }
 
   async updateUser(userData: UpdateUserPayload) {
-    const { data } = await api.put("/users", userData)
+    const { data } = await api.put(`/users/${userData._id}`, userData)
     return data
   }
 

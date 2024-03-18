@@ -3,10 +3,14 @@ import axios from "axios"
 
 import { env } from "@/env.mjs"
 
-import { clearAuth, getAuth } from "./auth"
+import { getAuth } from "./auth"
 
 const api = axios.create({
   baseURL: env.NEXT_PUBLIC_API_URL,
+})
+
+export const localApi = axios.create({
+  baseURL: `${env.NEXT_PUBLIC_APP_URL}/api`,
 })
 
 api.interceptors.request.use(async (config) => {
@@ -25,11 +29,10 @@ api.interceptors.response.use(
   },
   async (error) => {
     if (error?.response?.status === 401) {
-      clearAuth()
       if (typeof window !== "undefined") {
-        window.location.href = "/sign-in"
+        window.location.href = "/sign-out"
       } else {
-        redirect("/sign-in")
+        redirect("/sign-out")
       }
     }
 
