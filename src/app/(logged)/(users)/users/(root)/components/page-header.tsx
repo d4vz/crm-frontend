@@ -1,17 +1,12 @@
 "use client"
 
-import { useRouter } from "next/navigation"
 import { File, User } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogTrigger } from "@/components/ui/dialog"
+import { UserForm } from "@/app/(logged)/(users)/users/(root)/components/user-form"
 
 export const PageHeader: React.FC = () => {
-  const router = useRouter()
-
-  const handleCreateUser = () => {
-    router.push("/users/manage")
-  }
-
   return (
     <div className="mb-4 flex w-full items-center justify-between border-b bg-background p-4">
       <h1 className="text-lg font-semibold">Usuários</h1>
@@ -20,10 +15,15 @@ export const PageHeader: React.FC = () => {
           <File className="mr-2 h-4 w-4" />
           Exportar
         </Button>
-        <Button onClick={handleCreateUser}>
-          <User className="mr-2 h-4 w-4" />
-          Adicionar usuário
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>
+              <User className="mr-2 h-4 w-4" />
+              Adicionar usuário
+            </Button>
+          </DialogTrigger>
+          <UserForm />
+        </Dialog>
       </div>
     </div>
   )

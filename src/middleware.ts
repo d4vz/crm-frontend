@@ -6,8 +6,6 @@ import { getAuth } from "./lib/auth"
 export async function middleware(request: NextRequest) {
   const currentUser = await getAuth(request)
 
-  console.log("middleware", currentUser)
-
   if (currentUser && request.nextUrl.pathname.startsWith("/sign-in")) {
     return Response.redirect(new URL("/", request.url))
   }

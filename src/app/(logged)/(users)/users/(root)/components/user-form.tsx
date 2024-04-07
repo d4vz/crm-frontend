@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { CreateUserPayload, UpdateUserPayload } from "@/services/users/types"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -13,18 +14,22 @@ import { errorHandling } from "@/lib/error-handler"
 import useCreateUserMutation from "@/hooks/mutations/use-create-user-mutation"
 import useUpdateUserMutation from "@/hooks/mutations/use-update-user-mutation"
 
-import { Button } from "../ui/button"
+import { Button } from "../../../../../../components/ui/button"
+import {
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../../../../../../components/ui/dialog"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form"
-import { Input } from "../ui/input"
-import { Separator } from "../ui/separator"
+} from "../../../../../../components/ui/form"
+import { Input } from "../../../../../../components/ui/input"
 
 type UserFormPropsEdit = {
   defaultValues: User
@@ -104,6 +109,7 @@ const parseDataToUpdate = (
 type FormValues = CreateUserFormValues | UpdateUserFormValues
 
 export const UserForm: React.FC<UserFormProps> = ({ defaultValues, edit }) => {
+  const [persistInPage, setPersistInPage] = useState(true)
   const router = useRouter()
 
   const { mutateAsync: createUser, isPending: isCreatingUser } =
@@ -131,6 +137,9 @@ export const UserForm: React.FC<UserFormProps> = ({ defaultValues, edit }) => {
 
       const text = edit ? "atualizado" : "criado"
       toast.success(`Usuário ${text} com sucesso`)
+
+      if (persistInPage) return
+      router.push("/users")
     } catch (error) {
       const { status } = errorHandling(error)
 
@@ -147,24 +156,18 @@ export const UserForm: React.FC<UserFormProps> = ({ defaultValues, edit }) => {
   const handleCancel = () => router.push("/users")
 
   return (
-    <Form {...methods}>
-      <form className="w-full space-y-4 p-4" onSubmit={handleSubmit}>
-        <h1 className="text-2xl font-semibold">
-          {edit ? "Editar usuário" : "Criar usuário"}
-        </h1>
-
-        <Separator />
-
-        <h2 className="text-lg font-semibold">Dados básicos do usuário</h2>
-
-        <div className="flex flex-row gap-4">
+    <DialogContent className="sm:max-w-[425px]">
+      <DialogHeader>
+        <DialogTitle>{edit ? "Editar" : "Criar"} usuário</DialogTitle>
+      </DialogHeader>
+      <Form {...methods}>
+        <form className="grid gap-4" onSubmit={handleSubmit}>
           <FormField
             control={methods.control}
             name="name"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Nome</FormLabel>
-                <FormDescription>Nome completo do usuário</FormDescription>
                 <FormControl>
                   <Input placeholder="ex: João da Silva" {...field} />
                 </FormControl>
@@ -179,9 +182,6 @@ export const UserForm: React.FC<UserFormProps> = ({ defaultValues, edit }) => {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Email</FormLabel>
-                <FormDescription>
-                  Este email será utilizado para acessar o sistema
-                </FormDescription>
                 <FormControl>
                   <Input placeholder="ex: email@gmail.com" {...field} />
                 </FormControl>
@@ -189,18 +189,13 @@ export const UserForm: React.FC<UserFormProps> = ({ defaultValues, edit }) => {
               </FormItem>
             )}
           />
-        </div>
 
-        <div className="flex flex-row gap-4">
           <FormField
             control={methods.control}
             name="password"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Senha</FormLabel>
-                <FormDescription>
-                  Esta senha será utilizada para acessar o sistema
-                </FormDescription>
                 <FormControl>
                   <Input placeholder="ex: 12345678...." {...field} />
                 </FormControl>
@@ -215,9 +210,6 @@ export const UserForm: React.FC<UserFormProps> = ({ defaultValues, edit }) => {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Confirmar senha</FormLabel>
-                <FormDescription>
-                  Esta senha será utilizada para acessar o sistema
-                </FormDescription>
                 <FormControl>
                   <Input placeholder="ex: 12345678...." {...field} />
                 </FormControl>
@@ -225,28 +217,28 @@ export const UserForm: React.FC<UserFormProps> = ({ defaultValues, edit }) => {
               </FormItem>
             )}
           />
-        </div>
 
-        <Separator />
-
-        <div className="flex flex-row justify-end gap-4">
-          <Button
-            size="lg"
-            variant="destructive"
-            type="button"
-            onClick={handleCancel}
-          >
-            Cancelar
-          </Button>
-          <Button size="lg" type="submit">
-            {isCreatingUser || isUpdatingUser
-              ? "Salvando..."
-              : edit
-                ? "Salvar"
-                : "Criar"}
-          </Button>
-        </div>
-      </form>
-    </Form>
+          <div className="flex flex-row gap-4">
+            <DialogClose className="w-full">
+              <Button
+                variant="outline"
+                type="button"
+                onClick={handleCancel}
+                className="w-full"
+              >
+                Cancelar
+              </Button>
+            </DialogClose>
+            <Button
+              type="submit"
+              loading={isCreatingUser || isUpdatingUser}
+              className="w-full"
+            >
+              {edit ? "Salvar" : "Criar"}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </DialogContent>
   )
 }

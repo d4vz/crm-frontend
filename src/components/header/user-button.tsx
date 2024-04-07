@@ -17,7 +17,7 @@ import {
 } from "../ui/dropdown-menu"
 
 interface UserButtonProps {
-  user: User
+  user: User | null
 }
 
 export const UserButton: React.FC<UserButtonProps> = ({ user }) => {
@@ -29,6 +29,8 @@ export const UserButton: React.FC<UserButtonProps> = ({ user }) => {
     await clearAuth()
     router.push("/sign-in")
   }
+
+  if (!user) return null
 
   return (
     <DropdownMenu>

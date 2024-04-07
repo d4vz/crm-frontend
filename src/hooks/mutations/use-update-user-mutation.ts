@@ -7,9 +7,10 @@ export default function useUpdateUserMutation() {
   return useMutation({
     mutationFn: usersService.updateUser,
     mutationKey: ["updateUser"],
-    onSuccess: () => {
-      queryClient.invalidateQueries({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
         queryKey: ["users"],
+        refetchType: "all",
       })
     },
   })
