@@ -4,7 +4,7 @@ import { File, User } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
-import { UserForm } from "@/app/(logged)/(users)/users/(root)/components/user-form"
+import { UserForm } from "@/app/(logged)/users/(root)/components/user-form"
 
 export const PageHeader: React.FC = () => {
   return (

@@ -15,7 +15,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { UserForm } from "@/app/(logged)/(users)/users/(root)/components/user-form"
+import { UserForm } from "@/app/(logged)/users/(root)/components/user-form"
 
 import { DeleteUser } from "./delete-user"
 

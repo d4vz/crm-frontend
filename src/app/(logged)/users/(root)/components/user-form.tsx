@@ -14,13 +14,13 @@ import { errorHandling } from "@/lib/error-handler"
 import useCreateUserMutation from "@/hooks/mutations/use-create-user-mutation"
 import useUpdateUserMutation from "@/hooks/mutations/use-update-user-mutation"
 
-import { Button } from "../../../../../../components/ui/button"
+import { Button } from "../../../../../components/ui/button"
 import {
   DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "../../../../../../components/ui/dialog"
+} from "../../../../../components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -28,8 +28,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../../../../components/ui/form"
-import { Input } from "../../../../../../components/ui/input"
+} from "../../../../../components/ui/form"
+import { Input } from "../../../../../components/ui/input"
 
 type UserFormPropsEdit = {
   defaultValues: User
